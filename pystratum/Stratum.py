@@ -21,8 +21,8 @@ class Stratum:
         self.__username = username
         self.__password = password
         self.__sock = None
-        # self.__buffer = 1024 # 4096
-        self.__buffer = 4096
+        # self.__buffer = 1024 # 4096, 8192
+        self.__buffer = 8192
         self.is_connected = False
     
     
@@ -35,9 +35,11 @@ class Stratum:
             data = self.__sock.recv(self.__buffer).decode("utf-8")
             json_strings = [chunk for chunk in data.split('\n') if chunk]
             for d in json_strings:
-                response = json.loads(d)
-                callback(stratum, response)
-
+                try:
+                    response = json.loads(d)
+                    callback(stratum, response)
+                except json.JSONDecodeError:
+                    continue
         
 
     def connect(self):
