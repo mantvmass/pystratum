@@ -1,7 +1,6 @@
 import socket
 import json
 from typing import Callable, Dict
-import time
 
 
 class Stratum:
@@ -56,32 +55,30 @@ class Stratum:
         self.send({"id": 2, "method": "mining.authorize", "params": [self.__username, self.__password]})
         
         
-    def submit(self, jobID):
+    def submit(self, jobID, extranonce2, nonce):
         self.send({
             "id": 1, "method": "mining.submit",
             "params": [
                 self.__username,
                 jobID,
-                "fe36a31b",
-                "504e86ed",
-                "e9695791"
+                extranonce2,
+                nonce
             ]
         })
-        
+
 
 def handleReceive(stratum: Stratum, response: Dict[str, any]) -> None:
-    
     print(response)
     id = response.get("id", 0)
-    
-    if id == 1:
+    if id == None:
+        pass
+    elif id == 1:
         stratum.authorize()
     
         
 
 def main():
-    # stratum_client = Stratum("ap.luckpool.net", 3956, "RQpWNdNZ4LQ5yHUM3VAVuhUmMMiMuGLUhT.pystratum", "x")
-    stratum_client = Stratum("us.ss.btc.com", 1800, "RQpWNdNZ4LQ5yHUM3VAVuhUmMMiMuGLUhT.pystratum", "x")
+    stratum_client = Stratum("ap.luckpool.net", 3956, "RQpWNdNZ4LQ5yHUM3VAVuhUmMMiMuGLUhT.pystratum", "x")
     stratum_client.connect()
     stratum_client.subscribe()
     stratum_client.onReceive(stratum_client, handleReceive)
