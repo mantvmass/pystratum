@@ -27,10 +27,8 @@ class Stratum:
         self.__sock.sendall((json.dumps(request) + "\n").encode("utf-8"))
 
 
-    async def receive(self, json_decode: bool = True) -> Union[dict, bytes]:
-        if json_decode:
-            return json.loads(self.__sock.recv(1024).decode("utf-8"))
-        return self.__sock.recv(1024)
+    async def receive(self) -> Union[dict, bytes]:
+        return json.loads(self.__sock.recv(1024).decode("utf-8"))
         
 
     async def connect(self):
