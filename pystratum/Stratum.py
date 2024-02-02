@@ -40,6 +40,12 @@ class Stratum:
     async def subscribe(self):
         self.send({"id": 1, "method": "mining.subscribe", "params": []})
         
+        
+    async def authorize(self):
+        self.send({"id": 2, "method": "mining.authorize", "params": [self.__username, self.__password]})
+        
+    
+        
 
 # Example usage:
 async def main():
