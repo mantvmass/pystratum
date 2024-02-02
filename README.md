@@ -11,6 +11,7 @@ pip install git+https://github.com/mantvmass/pystratum.git
 Using
 ```python
 from pystratum import Stratum
+from typing import Dict
 
 
 def handleReceive(stratum: Stratum, response: Dict[str, any]) -> None:
