@@ -14,7 +14,7 @@ class Stratum:
     is_connected: bool
     
     
-    def __init__(self, host: str, port: int, username: str, password: str):
+    def __init__(self, host: str, port: int, username: str = None, password: str = None):
         self.__host = host
         self.__port = port
         self.__username = username
@@ -38,11 +38,24 @@ class Stratum:
         
     
     async def subscribe(self):
-        self.send({"id": 1, "method": "mining.subscribe", "params": []})
+        await self.send({"id": 1, "method": "mining.subscribe", "params": []})
         
         
     async def authorize(self):
-        self.send({"id": 2, "method": "mining.authorize", "params": [self.__username, self.__password]})
+        await self.send({"id": 2, "method": "mining.authorize", "params": [self.__username, self.__password]})
+        
+        
+    async def submit(self, jobID):
+        await self.send({
+            "id": 1, "method": "mining.submit",
+            "params": [
+                self.__username,
+                jobID,
+                "fe36a31b",
+                "504e86ed",
+                "e9695791"
+            ]
+        })
         
     
         
@@ -51,7 +64,9 @@ class Stratum:
 async def main():
     stratum_client = Stratum("sg.ss.btc.com", 1800, "gf", "fg")
     await stratum_client.connect()
-    await stratum_client.send({"id": 1, "method": "mining.subscribe", "params": []})
+    await stratum_client.subscribe()
+    print(await stratum_client.receive())
+    await stratum_client.authorize()
     print(await stratum_client.receive())
 
 if __name__ == "__main__":
