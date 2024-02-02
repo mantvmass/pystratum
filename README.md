@@ -1,5 +1,5 @@
 # PYStratum
-stratum client with python
+stratum client with python 3.9+
 
 ### Example
 
