@@ -21,7 +21,7 @@ class Stratum:
         self.__password = password
         self.__sock = None
         # self.__buffer = 1024 # 4096, 8192
-        self.__buffer = 8192
+        self.__buffer = 4096
         self.is_connected = False
     
     
